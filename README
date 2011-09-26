@@ -1,0 +1,6 @@
+Simple Bandwidth Calculator
+
+Demo at http://therub.org/pub/calc
+
+Implemented as a standalone PHP script which requires the bcmath plugin
+to handle large numbers.
