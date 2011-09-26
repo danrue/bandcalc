@@ -1,6 +1,7 @@
-Simple Bandwidth Calculator
+Simple bandwidth calculator for determining file transfer times or bandwidth
+requirements.
 
 Demo at http://therub.org/pub/calc
 
 Implemented as a standalone PHP script which requires the bcmath plugin
-to handle large numbers.
+for arbitrary precision arithmetic.
