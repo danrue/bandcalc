@@ -44,40 +44,38 @@ $tb = $gb = $mb = $kb = 0;
 $gbps = $mbps = $kbps = 0;
 $days = $hours = $minutes = $seconds = 0;
 $pretty_filesize = $pretty_bandwidth = $pretty_time = "";
+$calctype = "";
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    /* What are we calculating? */
-    if (isset($_POST['calcfilesize'])){
-        $calctype = "calcfilesize";
-    }
-    else if (isset($_POST['calcbandwidth'])){
-        $calctype = "calcbandwidth";
-    }
-    else if (isset($_POST['calctime'])){
-        $calctype = "calctime";
-    }
-    else {
-        die("You didn't choose a proper calculation type");
-    }
+/* What are we calculating? */
+if (isset($_GET['calcfilesize'])){
+    $calctype = "calcfilesize";
+}
+else if (isset($_GET['calcbandwidth'])){
+    $calctype = "calcbandwidth";
+}
+else if (isset($_GET['calctime'])){
+    $calctype = "calctime";
+}
 
+if (isset($calctype)){
 
     /* Process file sizes */
     if ($calctype != "calcfilesize"){
-        if ($_POST['tb'] != "")
-            $tb = $_POST['tb'];
+        if ($_GET['tb'] != "")
+            $tb = $_GET['tb'];
         else
             $tb = 0;
-        if ($_POST['gb'] != "")
-            $gb = $_POST['gb'];
+        if ($_GET['gb'] != "")
+            $gb = $_GET['gb'];
         else
             $gb = 0;
-        if ($_POST['mb'] != "")
-            $mb = $_POST['mb'];
+        if ($_GET['mb'] != "")
+            $mb = $_GET['mb'];
         else
             $mb = 0;
-        if ($_POST['kb'] != "")
-            $kb = $_POST['kb'];
+        if ($_GET['kb'] != "")
+            $kb = $_GET['kb'];
         else
             $kb = 0;
 
@@ -92,16 +90,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     /* Process bandwidth values */
     if ($calctype != "calcbandwidth"){
-        if ($_POST['gbps'] != "")
-            $gbps = $_POST['gbps'];
+        if ($_GET['gbps'] != "")
+            $gbps = $_GET['gbps'];
         else
             $gbps = 0;
-        if ($_POST['mbps'] != "")
-            $mbps = $_POST['mbps'];
+        if ($_GET['mbps'] != "")
+            $mbps = $_GET['mbps'];
         else
             $mbps = 0;
-        if ($_POST['kbps'] != "")
-            $kbps = $_POST['kbps'];
+        if ($_GET['kbps'] != "")
+            $kbps = $_GET['kbps'];
         else
             $kbps = 0;
 
@@ -115,20 +113,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     /* Process time fields */
     if ($calctype != "calctime"){
-        if ($_POST['days'] != "")
-            $days = $_POST['days'];
+        if ($_GET['days'] != "")
+            $days = $_GET['days'];
         else
             $days = 0;
-        if ($_POST['hours'] != "")
-            $hours = $_POST['hours'];
+        if ($_GET['hours'] != "")
+            $hours = $_GET['hours'];
         else
             $hours = 0;
-        if ($_POST['minutes'] != "")
-            $minutes = $_POST['minutes'];
+        if ($_GET['minutes'] != "")
+            $minutes = $_GET['minutes'];
         else
             $minutes = 0;
-        if ($_POST['seconds'] != "")
-            $seconds = $_POST['seconds'];
+        if ($_GET['seconds'] != "")
+            $seconds = $_GET['seconds'];
         else
             $seconds = 0;
 
@@ -171,13 +169,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $kbps = bcdiv(bcmod(bcmul($totalbytespersecond,"8"),MB),KB);
             if ($gbps > 0){
                 $remainder = substr(bcmod($totalbytespersecond, GB), 0, 3);
-                $pretty_bandwidth = sprintf("(<b>%s.%s gbps</b>)", $gbps, $remainder);
+                $pretty_bandwidth = sprintf("(<b>%s.%s gbps</b>)", 
+                                            $gbps, $remainder);
             } else if ($mbps > 0){
                 $remainder = substr(bcmod($totalbytespersecond, MB), 0, 3);
-                $pretty_bandwidth = sprintf("(<b>%s.%s mbps</b>)", $mbps, $remainder);
+                $pretty_bandwidth = sprintf("(<b>%s.%s mbps</b>)", 
+                                            $mbps, $remainder);
             } else if ($kb > 0){
                 $remainder = substr(bcmod($totalbytespersecond, KB), 0, 3);
-                $pretty_bandwidth = sprintf("(<b>%s.%s kbps</b>)", $kbps, $remainder);
+                $pretty_bandwidth = sprintf("(<b>%s.%s kbps</b>)", 
+                                            $kbps, $remainder);
             }
             break;
 
@@ -188,9 +189,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $minutes = intval(($totalseconds/60)%60);
             $seconds = $totalseconds%60;
             if ($days > 0){
-                $pretty_time = sprintf("<b>%dd %dh:%dm:%ds</b>", $days, $hours, $minutes, $seconds);
+                $pretty_time = sprintf("<b>%dd %dh:%dm:%ds</b>", 
+                                       $days, $hours, $minutes, $seconds);
             } else if ($hours > 0) {
-                $pretty_time = sprintf("<b>%dh:%dm:%ds</b>", $hours, $minutes, $seconds);
+                $pretty_time = sprintf("<b>%dh:%dm:%ds</b>", 
+                                       $hours, $minutes, $seconds);
             } else if ($minutes > 0) {
                 $pretty_time = sprintf("<b>%dm:%ds</b>", $minutes, $seconds);
             } else if ($seconds > 0) {
@@ -211,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <tr><td>
 
     <table>
-    <form action="" method="post">
+    <form action="" method="GET">
     <tr><td>
     <input type="submit" name="calcfilesize" value="Calc-->"></td><td>
     Filesize: </td><td>
@@ -234,18 +237,29 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     Transfer Time: </td><td>
         <input type="text" name="days" size="2" value="<?php echo $days?>">d +
         <input type="text" name="hours" size="2" value="<?php echo $hours?>">h +
-        <input type="text" name="minutes" size="2" value="<?php echo $minutes?>">m +
-        <input type="text" name="seconds" size="2" value="<?php echo $seconds?>">s
+        <input type="text" name="minutes" size="2" 
+         value="<?php echo $minutes?>">m +
+        <input type="text" name="seconds" size="2" 
+         value="<?php echo $seconds?>">s
         <?php echo $pretty_time;?>
     </td></tr>
 
     </form>
     </table>
 <br />
-<small>* calc uses 8 bits/byte, and does not correct for real world factors.  In other words, this will calculate the theoretical best case.  Real world transfers are generally at least 10% slower.</small>
+
+<small>
+    * calc uses 8 bits/byte, and does not correct for real world factors.  In
+    other words, this will calculate the theoretical best case.  Real world
+    transfers are generally at least 10% slower.
+</small>
+
 <br />
 <br />
-<small><a href="http://github.com/danrue/bandcalc">View Source @ GitHub</a></small>
+
+<small>
+    <a href="http://github.com/danrue/bandcalc">View Source @ GitHub</a>
+</small>
 
 </td></tr>
 </table>
