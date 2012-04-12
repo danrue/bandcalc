@@ -169,7 +169,7 @@ if (isset($calctype)){
             $kbps = bcdiv(bcmod($totalbitspersecond,MB),KB);
             if ($gbps > 0){
                 $gbps_float = bcdiv($totalbitspersecond,GB,3);
-                $pretty_bandwidth = sprintf("(<b>%s.%s gbps</b>)", $gbps_float);
+                $pretty_bandwidth = sprintf("(<b>%s gbps</b>)", $gbps_float);
             } else if ($mbps > 0){
                 $mbps_float = bcdiv($totalbitspersecond,MB,3);
                 $pretty_bandwidth = sprintf("(<b>%s mbps</b>)", $mbps_float);
