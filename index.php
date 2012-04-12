@@ -1,6 +1,6 @@
 <?php
 /* 
- * Copyright 2005, 2011 Dan Rue <drue@therub.org>. All rights reserved.
+ * Copyright 2005, 2011, 2012 Dan Rue <drue@therub.org>. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -146,39 +146,37 @@ if (isset($calctype)){
             $gb = bcdiv(bcmod($totalbytes,TB),GB);
             $mb = bcdiv(bcmod($totalbytes,GB),MB);
             $kb = bcdiv(bcmod($totalbytes,MB),KB);
+
             if ($tb > 0){
-                $remainder = substr(bcmod($totalbytes, TB), 0, 3);
-                $pretty_filesize = sprintf("(<b>%s.%s TB</b>)", $tb, $remainder);
+                $tb_float = bcdiv($totalbytes,TB,3);
+                $pretty_filesize = sprintf("(<b>%s TB</b>)", $tb_float);
             } else if ($gb > 0){
-                $remainder = substr(bcmod($totalbytes, GB), 0, 3);
-                $pretty_filesize = sprintf("(<b>%s.%s GB</b>)", $gb, $remainder);
+                $gb_float = bcdiv($totalbytes,GB,3);
+                $pretty_filesize = sprintf("(<b>%s GB</b>)", $gb_float);
             } else if ($mb > 0){
-                $remainder = substr(bcmod($totalbytes, MB), 0, 3);
-                $pretty_filesize = sprintf("(<b>%s.%s MB</b>)", $mb, $remainder);
+                $mb_float = bcdiv($totalbytes,MB,3);
+                $pretty_filesize = sprintf("(<b>%s MB</b>)", $mb_float);
             } else if ($kb > 0){
-                $remainder = substr(bcmod($totalbytes, KB), 0, 3);
-                $pretty_filesize = sprintf("(<b>%s.%s KB</b>)", $kb, $remainder);
+                $kb_float = bcdiv($totalbytes,KB,3);
+                $pretty_filesize = sprintf("(<b>%s KB</b>)", $kb_float);
 
             }
             break;
 
         case "calcbandwidth":
-            $totalbytespersecond = bcdiv($totalbytes,$totalseconds);
-            $gbps = bcdiv(bcmul($totalbytespersecond,"8"),GB);
-            $mbps = bcdiv(bcmod(bcmul($totalbytespersecond,"8"),GB),MB);
-            $kbps = bcdiv(bcmod(bcmul($totalbytespersecond,"8"),MB),KB);
+            $totalbitspersecond = bcmul(bcdiv($totalbytes,$totalseconds), 8);
+            $gbps = bcdiv($totalbitspersecond,GB);
+            $mbps = bcdiv(bcmod($totalbitspersecond,GB),MB);
+            $kbps = bcdiv(bcmod($totalbitspersecond,MB),KB);
             if ($gbps > 0){
-                $remainder = substr(bcmod($totalbytespersecond, GB), 0, 3);
-                $pretty_bandwidth = sprintf("(<b>%s.%s gbps</b>)", 
-                                            $gbps, $remainder);
+                $gbps_float = bcdiv($totalbitspersecond,GB,3);
+                $pretty_bandwidth = sprintf("(<b>%s.%s gbps</b>)", $gbps_float);
             } else if ($mbps > 0){
-                $remainder = substr(bcmod($totalbytespersecond, MB), 0, 3);
-                $pretty_bandwidth = sprintf("(<b>%s.%s mbps</b>)", 
-                                            $mbps, $remainder);
+                $mbps_float = bcdiv($totalbitspersecond,MB,3);
+                $pretty_bandwidth = sprintf("(<b>%s mbps</b>)", $mbps_float);
             } else if ($kb > 0){
-                $remainder = substr(bcmod($totalbytespersecond, KB), 0, 3);
-                $pretty_bandwidth = sprintf("(<b>%s.%s kbps</b>)", 
-                                            $kbps, $remainder);
+                $kbps_float = bcdiv($totalbitspersecond,KB,3);
+                $pretty_bandwidth = sprintf("(<b>%s kbps</b>)", $kbps_float);
             }
             break;
 
