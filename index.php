@@ -156,10 +156,9 @@ if (isset($calctype)){
             } else if ($mb > 0){
                 $mb_float = bcdiv($totalbytes,MB,3);
                 $pretty_filesize = sprintf("(<b>%s MB</b>)", $mb_float);
-            } else if ($kb > 0){
+            } else {
                 $kb_float = bcdiv($totalbytes,KB,3);
                 $pretty_filesize = sprintf("(<b>%s KB</b>)", $kb_float);
-
             }
             break;
 
@@ -174,7 +173,7 @@ if (isset($calctype)){
             } else if ($mbps > 0){
                 $mbps_float = bcdiv($totalbitspersecond,MB,3);
                 $pretty_bandwidth = sprintf("(<b>%s mbps</b>)", $mbps_float);
-            } else if ($kb > 0){
+            } else {
                 $kbps_float = bcdiv($totalbitspersecond,KB,3);
                 $pretty_bandwidth = sprintf("(<b>%s kbps</b>)", $kbps_float);
             }
@@ -194,7 +193,7 @@ if (isset($calctype)){
                                        $hours, $minutes, $seconds);
             } else if ($minutes > 0) {
                 $pretty_time = sprintf("<b>%dm:%ds</b>", $minutes, $seconds);
-            } else if ($seconds > 0) {
+            } else {
                 $pretty_time = sprintf("<b>%ds</b>", $seconds);
             }
             break;
